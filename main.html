@@ -1,16 +1,59 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-	<link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <title>Debounce Demo (Normal)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f9;
+      display: flex;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    h2 { color: #333; }
+    input {
+      padding: 10px;
+      width: 300px;
+      font-size: 16px;
+      border: 2px solid #888;
+      border-radius: 8px;
+    }
+    input:focus { border-color: #4CAF50; }
+    p { margin-top: 15px; color: #555; }
+  </style>
 </head>
-
 <body>
-	<!-- the entire body must be written by student -->
-    <script type="text/javascript" src="./script.js">
-</script>
+  <h2>Debounce Demo (Normal)</h2>
+  <input type="text" id="search" placeholder="Type something..." />
+  <p>Open console (F12) to see the debounced logs</p>
 
+  <script>
+    function debounce(callback, delay, immediate = false) {
+      let timeout;
+      return function (...args) {
+        const context = this;
+        const later = () => {
+          timeout = null;
+          if (!immediate) callback.apply(context, args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, delay);
+      };
+    }
+
+    const input = document.getElementById("search");
+
+    const logInput = debounce((text) => {
+      console.log("User stopped typing. Final value:", text);
+    }, 2000);
+
+    input.addEventListener("input", function () {
+      logInput(this.value);
+    });
+  </script>
 </body>
-
 </html>
