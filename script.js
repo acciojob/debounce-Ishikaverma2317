@@ -1,4 +1,3 @@
-
 function debounce(callback, delay, immediate = false) {
   let timeout;
 
@@ -19,13 +18,4 @@ function debounce(callback, delay, immediate = false) {
   };
 }
 
-
-const input = document.getElementById("search");
-const output = document.getElementById("output");
-
-function showText(e) {
-  output.textContent = "You typed: " + e.target.value;
-}
-
-const debouncedInput = debounce(showText, 1000);
-input.addEventListener("input", debouncedInput);
+module.exports = debounce; // ✅ Testing ke liye export karna zaruri hai
