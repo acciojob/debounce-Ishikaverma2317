@@ -2,57 +2,95 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Debounce Demo (Normal)</title>
+  <title>Debounce Function Demo</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #f4f4f9;
       display: flex;
-      height: 100vh;
       justify-content: center;
       align-items: center;
       flex-direction: column;
+      height: 100vh;
     }
 
-    h2 { color: #333; }
+    h2 {
+      margin-bottom: 10px;
+      color: #333;
+    }
+
     input {
       padding: 10px;
       width: 300px;
       font-size: 16px;
       border: 2px solid #888;
-      border-radius: 8px;
+      border-radius: 6px;
+      margin: 10px 0;
     }
-    input:focus { border-color: #4CAF50; }
-    p { margin-top: 15px; color: #555; }
+
+    input:focus {
+      border-color: #4CAF50;
+      outline: none;
+    }
+
+    p {
+      font-size: 14px;
+      color: #666;
+    }
   </style>
 </head>
 <body>
-  <h2>Debounce Demo (Normal)</h2>
-  <input type="text" id="search" placeholder="Type something..." />
-  <p>Open console (F12) to see the debounced logs</p>
+  <h2>Debounce Function Demo</h2>
+
+  <input type="text" id="normal" placeholder="Normal debounce (wait 2s after typing)" />
+  <input type="text" id="immediate" placeholder="Immediate debounce (first call instantly)" />
+
+  <p>👉 Open console (F12) to see logs</p>
 
   <script>
+    // Debounce implementation
     function debounce(callback, delay, immediate = false) {
       let timeout;
+
       return function (...args) {
         const context = this;
+
         const later = () => {
           timeout = null;
-          if (!immediate) callback.apply(context, args);
+          if (!immediate) {
+            callback.apply(context, args);
+          }
         };
+
+        const callNow = immediate && !timeout;
+
         clearTimeout(timeout);
         timeout = setTimeout(later, delay);
+
+        if (callNow) {
+          callback.apply(context, args);
+        }
       };
     }
 
-    const input = document.getElementById("search");
-
-    const logInput = debounce((text) => {
-      console.log("User stopped typing. Final value:", text);
+    // Example 1: Normal debounce
+    const normalInput = document.getElementById("normal");
+    const normalDebounced = debounce((text) => {
+      console.log("Normal Debounce (after delay):", text);
     }, 2000);
 
-    input.addEventListener("input", function () {
-      logInput(this.value);
+    normalInput.addEventListener("input", function () {
+      normalDebounced(this.value);
+    });
+
+    // Example 2: Immediate debounce
+    const immediateInput = document.getElementById("immediate");
+    const immediateDebounced = debounce((text) => {
+      console.log("Immediate Debounce (first call instantly):", text);
+    }, 2000, true);
+
+    immediateInput.addEventListener("input", function () {
+      immediateDebounced(this.value);
     });
   </script>
 </body>
